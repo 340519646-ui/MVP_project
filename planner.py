@@ -1,29 +1,42 @@
 from ai_client import ask_ai
+import random
+import os
+import time
 
-print("====== AI活动策划生成器 ======")
 
-theme = input("活动主题：")
-people = input("参与人数：")
-budget = input("预算：")
+def generate_plan(theme, type_, budget, prompt_type):
 
-# 读取prompt模板
-with open("prompts/planner.txt", "r") as f:
-    template = f.read()
+    path = f"prompts/{prompt_type}.txt"
 
-prompt = template.format(
-    theme=theme,
-    people=people,
-    budget=budget
-)
+    # 读取prompt模板
+    with open(path, "r", encoding="utf-8") as f:
+        template = f.read()
 
-print("\nAI生成中...\n")
+    example = ""
 
-result = ask_ai(prompt)
+    # 只有 basic 才读取案例
+    if prompt_type == "basic":
+        files = os.listdir("data")
+        example_file = random.choice(files)
 
-print(result)
+        with open(f"data/{example_file}", "r", encoding="utf-8") as f:
+            example = f.read()
 
-# 保存文件
-with open("output/plan.md", "w") as f:
-    f.write(result)
+    # 填充prompt
+    prompt = template.format(
+        theme=theme,
+        type=type_,
+        budget=budget,
+        example=example
+    )
 
-print("\n策划已保存到 output/plan.md")
+    # 调用AI
+    result = ask_ai(prompt)
+
+    # 保存结果
+    filename = f"output/{prompt_type}_{int(time.time())}.md"
+
+    with open(filename, "w", encoding="utf-8") as f:
+        f.write(result)
+
+    return result

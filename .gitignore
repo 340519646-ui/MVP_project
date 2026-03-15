@@ -1,0 +1,17 @@
+# python
+__pycache__/
+*.pyc
+
+# 虚拟环境
+venv/
+.venv/
+.venv-1/
+
+# 输出文件
+output/
+
+# vscode
+.vscode/
+
+# data cache
+*.log
