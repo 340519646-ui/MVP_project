@@ -1,6 +1,8 @@
 import streamlit as st
 from planner import generate_plan
 
+st.set_page_config(page_title="校园活动策划AI助手", layout="wide")
+
 st.title("校园活动策划AI助手")
 
 st.info("输入活动信息，AI将自动生成完整策划方案")
