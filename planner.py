@@ -14,10 +14,16 @@ def generate_plan(theme, type_, budget, prompt_type):
 
     example = ""
 
-    # 只有 basic 才读取案例
-    if prompt_type == "basic":
+    # 只有 fewshot 才读取案例
+    if prompt_type == "fewshot":
         files = os.listdir("data")
-        example_file = random.choice(files)
+        
+        related_files = [f for f in files if type_ in f]
+
+        if related_files:
+            example_file = random.choice(related_files)
+        else:
+            example_file = random.choice(files)
 
         with open(f"data/{example_file}", "r", encoding="utf-8") as f:
             example = f.read()

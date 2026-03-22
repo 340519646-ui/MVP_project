@@ -7,8 +7,14 @@ client = OpenAI(
     base_url="https://api.deepseek.com"
 )
 
-def ask_ai(prompt, retry=3):
+def ask_ai(prompt, history=None,use_tools=False,retry=3):
+    full_prompt = ""
 
+    if history:
+        for h in history:
+            full_prompt += f"用户:{h['user']}\nAI:{h['ai']}\n"
+
+    full_prompt += prompt
     for i in range(retry):
 
         try:
