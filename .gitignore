@@ -18,3 +18,4 @@ output/
 
 # pycharmIDE配置目录
 .idea/
+.vscode/

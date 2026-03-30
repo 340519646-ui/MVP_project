@@ -1,8 +1,11 @@
 from ai_client import ask_ai
+from rag_engine import load_docs,build_index,search
 import random
 import os
 import time
 
+load_docs()
+index, _ =build_index()
 
 def generate_plan(theme, type_, budget, prompt_type):
 
@@ -19,7 +22,7 @@ def generate_plan(theme, type_, budget, prompt_type):
         files = os.listdir("data")
         
         related_files = [f for f in files if type_ in f]
-
+        #向量化搜索
         if related_files:
             example_file = random.choice(related_files)
         else:

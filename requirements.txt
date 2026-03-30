@@ -1,0 +1,15 @@
+#调用ai工具需要的包
+streamlit>=1.30.0
+python-dotenv>=1.0.0
+tqdm>=4.66.0
+
+# RAG功能相关
+faiss-cpu>=1.7.4  
+sentence-transformers>=2.2.2
+
+# 工具库
+numpy>=1.24.0
+pandas>=2.0.0
+
+# 安装方式
+# pip install -r requirements.txt
