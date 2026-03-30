@@ -15,3 +15,6 @@ output/
 
 # data cache
 *.log
+
+# pycharmIDE配置目录
+.idea/
