@@ -8,12 +8,23 @@ load_docs()
 index, _ =build_index()
 
 def generate_plan(theme, type_, budget, prompt_type):
+    # 分析案例
+    analysis_prompt = f"""
+分析这个活动的关键策划要点：
 
+主题：{theme}
+类型：{type_}
+预算：{budget}
+
+列出5条关键点
+    """
+    analysis = ask_ai(analysis_prompt)
+    
     path = f"prompts/{prompt_type}.txt"
 
     # 读取prompt模板
     with open(path, "r", encoding="utf-8") as f:
-        template = f.read()
+        prompt_template = f.read()
 
     example = ""
 
@@ -22,7 +33,7 @@ def generate_plan(theme, type_, budget, prompt_type):
         files = os.listdir("data")
         
         related_files = [f for f in files if type_ in f]
-        #向量化搜索
+        #  向量化搜索
         if related_files:
             example_file = random.choice(related_files)
         else:
@@ -30,17 +41,22 @@ def generate_plan(theme, type_, budget, prompt_type):
 
         with open(f"data/{example_file}", "r", encoding="utf-8") as f:
             example = f.read()
-
+    #  RAG搜索
+    elif prompt_type == "rag":
+        query = f"{theme} {type_}"
+        rag_examples = search(query, index, k=2)
+        example = "\n\n".join(rag_examples)
     # 填充prompt
-    prompt = template.format(
+    final_prompt = prompt_template.format(
         theme=theme,
         type=type_,
         budget=budget,
-        example=example
+        example=example,
+        analysis=analysis
     )
 
     # 调用AI
-    result = ask_ai(prompt)
+    result = ask_ai(final_prompt)
 
     # 保存结果
     filename = f"output/{prompt_type}_{int(time.time())}.md"
