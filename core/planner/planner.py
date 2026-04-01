@@ -1,5 +1,5 @@
-from ai_client import ask_ai
-from rag_engine import load_docs,build_index,search
+from core.llm.ai_client import ask_ai
+from core.rag.rag_engine import load_docs,build_index,search
 import random
 import os
 import time

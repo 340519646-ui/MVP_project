@@ -1,5 +1,8 @@
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),"..")))
 import streamlit as st
-from planner import generate_plan
+from services.planner_service import generate_activity
 
 st.set_page_config(page_title="校园活动策划AI助手", layout="wide")
 
@@ -17,7 +20,7 @@ budget = st.number_input("预算")
 
 prompt_type = st.selectbox(
     "生成策略",
-    ["basic", "role", "step", "fewshot"]
+    [ "role", "step", "fewshot","rag"]
 )
 
 # 按钮逻辑
@@ -27,7 +30,7 @@ if st.button("生成策划案"):
         st.warning("⚠ 请输入活动主题")
     else:
         with st.spinner("AI正在生成策划案，请稍后..."):
-            result = generate_plan(theme, type_, budget, prompt_type)
+            result = generate_activity(theme,type_,budget,prompt_type)
 
         # 存入状态（关键！）
         st.session_state["result"] = result

@@ -1,6 +1,7 @@
 # python
 __pycache__/
 *.pyc
+.cache/
 
 # 虚拟环境
 venv/
