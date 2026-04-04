@@ -1,9 +1,12 @@
 from openai import OpenAI
 import os
 import time
+from dotenv import load_dotenv
+
+load_dotenv()
 
 client = OpenAI(
-    api_key="sk-46456a2253e94a788323389f0b48abf5",
+    api_key=os.getenv("OPENAI_API_KEY"),
     base_url="https://api.deepseek.com"
 )
 
