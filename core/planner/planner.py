@@ -49,6 +49,7 @@ def generate_plan(theme, type_, budget, prompt_type):
 类型：{type_}
 预算：{budget}
 已有分析:{analysis}
+数据库类似案例:{example}
 请用【Markdown格式】输出，要求：
 
 1. 必须有清晰结构
