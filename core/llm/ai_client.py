@@ -41,3 +41,4 @@ def ask_ai(prompt, history=None,use_tools=False,retry=3):
                 time.sleep(3)
             else:
                 return "AI请求失败，请稍后再试"
+            

@@ -10,8 +10,8 @@ st.title("校园活动策划AI助手")
 
 theme = st.text_input("活动主题")
 type_ = st.text_input("活动类型")
-budget = st.number_input("预算")
-
+budget = st.number_input("预算",step=1)
+person = st.number_input("人数",step=1)
 prompt_type = st.selectbox(
     "生成策略",
     ["role", "step", "fewshot", "rag"]
@@ -26,7 +26,7 @@ if st.button("生成策划案"):
         st.warning("请输入主题")
     else:
         with st.spinner("生成中..."):
-            result = generate_plan_service(theme, type_, budget, prompt_type)
+            result = generate_plan_service(theme, type_, budget, prompt_type,person)
 
         st.session_state["result"] = result
 
