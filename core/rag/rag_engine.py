@@ -2,7 +2,7 @@ from sentence_transformers import SentenceTransformer
 import faiss
 import os
 
-# ===== 全局单例（关键）=====
+
 _model = None
 _docs = None
 _doc_texts = None
