@@ -5,8 +5,8 @@ import os
 import time
 
 
-def generate_plan(theme, type_, budget, prompt_type,person):
-
+def generate_plan(theme, type_, budget, prompt_type,person,history=None):
+    
     
     final_prompt = prompts_choice(theme, type_, budget, prompt_type,person)
 
