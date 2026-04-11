@@ -10,7 +10,7 @@ client = OpenAI(
     base_url="https://api.deepseek.com"
 )
 
-def ask_ai(prompt, history=None,max_history=5,retry=3):
+def ask_ai(prompt, history=None,mode="generate",max_history=5,retry=3):
     """
     :param prompt:当前用户输入问题
     :param history:[{"user":"...","ai":"..."}]
@@ -20,9 +20,15 @@ def ask_ai(prompt, history=None,max_history=5,retry=3):
     
     messages=[]
     
-    messages.append({
-        "role":"system",
-        "content":"你是校园活动策划专家，负责优化已有方案"#保留接口，可以改变ai回答模式
+    if mode == "optimize":
+        messages.append({
+            "role": "system",
+            "content": "你是校园活动策划专家，负责基于已有方案进行优化。"
+        })
+    else:
+        messages.append({
+            "role": "system",
+            "content": "你是校园活动策划专家，负责生成结构完整、可执行的校园活动策划案。"
         })
     
 
@@ -34,21 +40,12 @@ def ask_ai(prompt, history=None,max_history=5,retry=3):
                 "role": "user",
                 "content": h["user"]
             })
-            if h["ai"]:
+            if h.get("ai"):
                 messages.append({
                     "role": "assistant",
                     "content": h["ai"]
                 })
-    messages.append({
-    "role": "user",
-    "content": f"""
-请优化当前校园活动策划方案：
-
-要求{prompt}
-
-用户最新修改要求已在对话历史中，请基于历史进行优化。
-"""
-})
+    messages.append({"role": "user", "content": prompt})
 
     for i in range(retry):
 

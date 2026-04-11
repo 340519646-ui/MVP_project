@@ -54,6 +54,9 @@ if mode =="生成策划案":
                 }
             ]
 elif mode == "优化策划案":
+    if not st.session_state["history"]:
+        st.info("请先生成一版策划案，再进行优化。")
+        st.stop()
     user_input = st.chat_input("请输入修改需求，例如：互动细节/预算细节")
     
     for h in st.session_state["history"]:
@@ -82,6 +85,6 @@ elif mode == "优化策划案":
 
         st.rerun()
 
-if st.session_state["result"]:
+if mode=="生成策划案" and st.session_state["result"]:
     st.markdown("## 策划案")
     st.markdown(st.session_state["result"])
