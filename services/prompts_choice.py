@@ -4,7 +4,7 @@ from core.rag.rag_engine import search
 from core.llm.ai_client import ask_ai
 import random
 import os
-def prompts_choice(theme, type_, budget, prompt_type,person):
+def prompts_choice(theme, type_, budget, prompt_type,person,duration,venue_type,target_audience,goal_priority):
     example = None
     if prompt_type == "role":
         final_prompt=render_prompt("role.txt",{
@@ -57,7 +57,11 @@ def prompts_choice(theme, type_, budget, prompt_type,person):
         "budget":budget,
         "person":person,
         "analysis": analysis,
-        "summary" : summary
+        "summary" : summary,
+        "duration":duration,
+        "venue_type":venue_type,
+        "target_audience":target_audience,
+        "goal_prior":goal_priority
         })
     
     return final_prompt

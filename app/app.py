@@ -12,8 +12,14 @@ st.title("校园活动策划AI助手")
 
 theme = st.text_input("活动主题")
 type_ = st.text_input("活动类型")
-budget = st.number_input("预算",step=1)
-person = st.number_input("人数",step=1)
+budget = st.number_input("预算",step=1,min_value=0)
+person = st.number_input("人数",step=1,min_value=1)
+duration = st.number_input("活动时长(单位：小时)",step=1,min_value=1)
+venue_type = st.selectbox("场地类型", ["室内", "户外", "线上", "混合"])
+target_audience = st.text_input("目标人群")
+goal_priority = st.text_input("核心目标")
+
+
 prompt_type = st.selectbox(
     "生成策略",
     ["role", "step", "fewshot", "rag"]
@@ -31,7 +37,7 @@ if "history" not in st.session_state:
     
 if mode =="生成策划案":
     if st.button("生成"):
-
+    
         if theme == "":
             st.warning("请输入主题")
         else:
@@ -42,6 +48,10 @@ if mode =="生成策划案":
                     budget, 
                     prompt_type,
                     person,
+                    duration,
+                    venue_type,
+                    target_audience,
+                    goal_priority
                     )
 
             st.session_state["result"] = result
@@ -49,7 +59,7 @@ if mode =="生成策划案":
             #初始化对话历史
             st.session_state["history"]=[
                 {
-                    "user": f"生成策划案：主题={theme}, 类型={type_}, 预算={budget}, 人数={person}",
+                    "user": f"生成策划案：主题:{theme}, 类型:{type_}, 预算:{budget}, 人数:{person}",
                     "ai": result
                 }
             ]
