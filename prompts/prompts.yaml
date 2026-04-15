@@ -1,0 +1,26 @@
+name: generate_plan
+model: glm-4
+
+messages:
+  - role: system
+    content: |
+      你是校园活动策划专家，必须严格按照JSON输出。
+
+      输出必须符合以下结构：
+      {{output_schema}}
+
+      禁止输出额外文本。
+
+  - role: user
+    content: |
+      活动主题: {{theme}}
+      活动类型: {{type_}}
+      预算: {{budget}}
+      人数: {{person}}
+      场地: {{venue_type}}
+      目标人群: {{target_audience}}
+
+      请结合以下参考案例：
+      {{retrieved_cases}}
+
+      生成完整策划方案

@@ -1,0 +1,97 @@
+skill_name: campus_event_planner
+version: 1.0.0
+
+description: >
+  校园文化活动策划生成 Skill，统一编排 prompt 策略、RAG 检索、LLM 调用与结果组装。
+
+input_schema:
+  type: object
+  required:
+    - theme
+    - type_
+    - budget
+    - person
+  properties:
+    theme:
+      type: string
+    type_:
+      type: string
+    budget:
+      type: number
+    person:
+      type: integer
+    prompt_type:
+      type: string
+    duration:
+      type: number
+    venue_type:
+      type: string
+    target_audience:
+      type: string
+    goal_priority:
+      type: string
+
+output_schema:
+  type: object
+  required:
+    - plan_markdown
+    - strategy
+  properties:
+    plan_markdown:
+      type: string
+    strategy:
+      type: string
+    analysis:
+      type: string
+    summary:
+      type: string
+    references:
+      type: array
+      items:
+        type: string
+
+workflow:
+  - id: preprocess
+    type: transform
+    handler: normalize_input
+    defaults:
+      prompt_type: rag
+      duration: 2
+      venue_type: 室内
+      target_audience: 校内学生
+      goal_priority: 参与度
+
+  - id: enrich_context
+    type: transform
+    handler: enrich_context
+    query_template: "{theme} {type_} 校园活动"
+    top_k: 2
+    doc_char_limit: 500
+    analysis_prompt_template: |
+      分析这个活动的关键策划要点：
+
+      主题：{theme}
+      类型：{type_}
+      预算：{budget}
+      人数：{person}
+
+      列出5条关键点
+
+  - id: build_prompt
+    type: transform
+    handler: build_prompt
+    templates:
+      role: role.txt
+      step: step.txt
+      fewshot: fewshot.txt
+      rag: rag.txt
+
+  - id: generate_plan
+    type: llm
+    prompt_key: prompt
+    output_key: plan_markdown
+    mode_key: llm_mode
+
+  - id: assemble_result
+    type: transform
+    handler: assemble_result
