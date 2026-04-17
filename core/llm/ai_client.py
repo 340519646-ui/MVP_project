@@ -4,11 +4,15 @@ import time
 from dotenv import load_dotenv
 
 load_dotenv()
-
+api_key=os.getenv("OPENAI_API_KEY")
+if not api_key:
+    raise ValueError("OPENAI_API_KEY is not set")
 client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY"),
+    api_key=api_key,
     base_url="https://api.deepseek.com"
 )
+
+
 
 def ask_ai(prompt, history=None,mode="generate",max_history=5,retry=3):
     """
