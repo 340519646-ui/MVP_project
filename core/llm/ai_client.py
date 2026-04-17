@@ -10,30 +10,55 @@ client = OpenAI(
     base_url="https://api.deepseek.com"
 )
 
-def ask_ai(prompt, history=None,use_tools=False,retry=3):
-    full_prompt = ""
+def ask_ai(prompt, history=None,mode="generate",max_history=5,retry=3):
+    """
+    :param prompt:当前用户输入问题
+    :param history:[{"user":"...","ai":"..."}]
+    :param retry:重复次数
+    :param max_history:可保留最大历史
+    """
+    
+    messages=[]
+    
+    if mode == "optimize":
+        messages.append({
+            "role": "system",
+            "content": "你是校园活动策划专家，负责基于已有方案进行优化。"
+        })
+    else:
+        messages.append({
+            "role": "system",
+            "content": "你是校园活动策划专家，负责生成结构完整、可执行的校园活动策划案。"
+        })
+    
 
     if history:
+        history = history[-max_history:]
+        
         for h in history:
-            full_prompt += f"用户:{h['user']}\nAI:{h['ai']}\n"
+            messages.append({
+                "role": "user",
+                "content": h["user"]
+            })
+            if h.get("ai"):
+                messages.append({
+                    "role": "assistant",
+                    "content": h["ai"]
+                })
+    messages.append({"role": "user", "content": prompt})
 
-    full_prompt += prompt
     for i in range(retry):
 
         try:
-
             response = client.chat.completions.create(
                 model="deepseek-chat",
-                messages=[
-                    {"role": "user", "content": prompt}
-                ],
+                messages=messages,
                 timeout=120
             )
 
             return response.choices[0].message.content
 
         except Exception as e:
-
             print(f"AI请求失败: {e}")
 
             if i < retry - 1:
